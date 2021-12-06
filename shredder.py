@@ -7,6 +7,7 @@ Written by Josh Harkema -- josh@joshharkema.com
 import datetime
 import random
 import string
+import time
 
 import praw
 
@@ -60,9 +61,9 @@ def main():
     my_submissions = reddit.user.me().submissions.new(limit=None)
 
     for comment in my_comments:
-        time = datetime.datetime.fromtimestamp(comment.created)
+        created_time = datetime.datetime.fromtimestamp(comment.created)
         # this overwrites the comment, saves it and deletes it
-        if time < delta_now():
+        if created_time < delta_now():
             comment.edit(string_generator())
             comment.delete()
             print("Comment:", comment, "Overwriten with: '%s' DELETED"
@@ -70,19 +71,21 @@ def main():
         else:
             print("Comment:", comment, "Body: '%s' SKIPPED"
                   % comment.body)
+        time.sleep(4)
 
     # Iterates through submissions and nukes them, there is no way to
     # overwrite them like the comments
     for submission in my_submissions:
-        time = datetime.datetime.fromtimestamp(submission.created)
+        created_time = datetime.datetime.fromtimestamp(submission.created)
         # delete the submission
-        if time < delta_now():
+        if created_time < delta_now():
             submission.delete()
             print("Submission:", submission, "Titled: '%s' DELETED"
                   % submission.title)
         else:
             print("Submission:", submission, "Titled: '%s' SKIPPED"
                   % submission.title)
+        time.sleep(4)
 
     print("At, %s, your Reddit account was shredded successfully."
           % datetime.datetime.now())
