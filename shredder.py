@@ -60,6 +60,8 @@ def main():
     my_comments = reddit.user.me().comments.new(limit=None)
     my_submissions = reddit.user.me().submissions.new(limit=None)
 
+    # TODO: This seems to only run on a single page of comments
+    # The script needs to be run multiple times to remove all comments
     for comment in my_comments:
         created_time = datetime.datetime.fromtimestamp(comment.created)
         # this overwrites the comment, saves it and deletes it
